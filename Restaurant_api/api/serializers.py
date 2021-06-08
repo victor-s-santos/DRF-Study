@@ -33,29 +33,29 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_ingredients(self, recipe):
         try:
-            recipe_ingredients = models.Ingredient.objects.filter(recipe__id=recipe.id)
+            recipe_ingredients = Ingredient.objects.filter(recipe__id=recipe.id)
             return IngredientSerializer(recipe_ingredients, many=True).data
-        except models.Ingredient.DoesNotExist:
+        except Ingredient.DoesNotExist:
             return None
 
-        def create(self, validated_data):
-            """
-            Create function for recipes, a restaurant and a list of ingredients is asociated. The restaurantId
-            is taken from the corresponding path parameter and the ingredients can be added optionally in the post body.
-            """
-            ingredients_data = validated_data.pop("ingredients")
-            restaurant = models.Restaurant.objects.get(pk=validated_data["restaurant_id"])
-            validated_data["restaurant"] = restaurant
-            recipe = models.Recipe.objects.create(**validated_data)
+    def create(self, validated_data):
+        """
+        Create function for recipes, a restaurant and a list of ingredients is asociated. The restaurantId
+        is taken from the corresponding path parameter and the ingredients can be added optionally in the post body.
+        """
+        ingredients_data = validated_data.pop("ingredients")
+        restaurant = Restaurant.objects.get(pk=validated_data["restaurant_id"])
+        validated_data["restaurant"] = restaurant
+        recipe = Recipe.objects.create(**validated_data)
 
-            """Assign ingredients if it are present in the body"""
-            if ingredients_data:
-                for ingredient_dict in ingredients_data:
-                    ingredient = models.Ingredient(name=ingredient_dict["name"])
-                    ingredient.save()
-                    ingredient.recipe.add(recipe)
-            return recipe
-    
-        class Meta:
-            model = Recipe
-            fields = ['id', 'name', 'type', 'thumbnail', 'ingredients'] 
+        """Assign ingredients if it are present in the body"""
+        if ingredients_data:
+            for ingredient_dict in ingredients_data:
+                ingredient = Ingredient(name=ingredient_dict["name"])
+                ingredient.save()
+                ingredient.recipe.add(recipe)
+        return recipe
+
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name', 'type', 'thumbnail', 'ingredients'] 

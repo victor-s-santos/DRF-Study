@@ -22,6 +22,7 @@ class Recipe(models.Model):
                                 ('COFFE', 'Coffe'),
                                 ('DINNER', 'Dinner')
                             ])
+    thumbnail = models.ImageField(upload_to="recipe_thumbnails", default="recipe_thumbnails/default.png")
     
     def __str__(self):
         return self.name
