@@ -1,7 +1,7 @@
 import os
 import base64
 from rest_framework import serializers
-from models import Restaurant, Recipe, Ingredient
+from .models import Restaurant, Recipe, Ingredient
 from django.conf import settings
 
 class RestaurantSerializer(serializers.ModelSerializer):
@@ -39,10 +39,10 @@ class RecipeSerializer(serializers.ModelSerializer):
             return None
 
         def create(self, validated_data):
-                 """
-                 Create function for recipes, a restaurant and a list of ingredients is asociated. The restaurantId
-                 is taken from the corresponding path parameter and the ingredients can be added optionally in the post body.
-                 """
+            """
+            Create function for recipes, a restaurant and a list of ingredients is asociated. The restaurantId
+            is taken from the corresponding path parameter and the ingredients can be added optionally in the post body.
+            """
             ingredients_data = validated_data.pop("ingredients")
             restaurant = models.Restaurant.objects.get(pk=validated_data["restaurant_id"])
             validated_data["restaurant"] = restaurant
