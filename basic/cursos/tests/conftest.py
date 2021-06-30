@@ -25,3 +25,12 @@ def get_or_create_token(db, create_user):
     user = create_user()
     token, _ = Token.objects.get_or_create(user=user)
     return token
+
+@pytest.fixture
+def api_client_with_credentials(
+   db, create_user, api_client
+):
+   user = create_user()
+   api_client.force_authenticate(user=user)
+   yield api_client
+   api_client.force_authenticate(user=None)

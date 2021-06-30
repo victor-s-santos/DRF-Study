@@ -20,3 +20,8 @@ def test_get_cursos_authenticated(api_client, get_or_create_token):
     token = get_or_create_token
     api_client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
     assert api_client.get(url).status_code == 200
+
+@pytest.mark.django_db
+def test_get_cursos_authenticated_other_fixture(api_client_with_credentials):
+    url = '/api/v2/cursos/'
+    assert api_client_with_credentials.get(url).status_code == 200
